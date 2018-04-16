@@ -1,4 +1,0 @@
----
-- hosts: cent
-  roles:
-     - tomcat
