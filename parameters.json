@@ -1,0 +1,60 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "eastus"
+        },
+        "virtualMachineName": {
+            "value": "NewUbuntu"
+        },
+        "virtualMachineSize": {
+            "value": "Standard_D2s_v3"
+        },
+        "adminUsername": {
+            "value": "ubuntu"
+        },
+        "virtualNetworkName": {
+            "value": "ansibleteam1-vnet"
+        },
+        "networkInterfaceName": {
+            "value": "ubuntutools249"
+        },
+        "diskSizeGB": {
+            "value": "30"
+        },
+        "networkSecurityGroupName": {
+            "value": "UbuntuTools-nsg"
+        },
+        "adminPublicKey": {
+            "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDnP5vwvkob3a28NBz12tIPTDEsJJUNIBYibXnMohbyz4FKppEI7b9JKIcX0bdopOafqNIKkrFj2TdWZh3Yryb/zGP4WXTU67q+XT4WyTTcJ5xbUAxSP6YqxkV6UE9RctsHp2LfTJUJT/uASfu2Y3NH3eYTRi0CS4DP/KMTX1INitCG2LRizh4gQaRb+djYPgFM4xFV6HIFU61by18ui/x03Sfly9pMMjWrBS8ySPwmT8dR+LS5EikcU7rV3DtWJrx3I4nrtHcr1Mme9fSatzqgK1TghwpLlSjRMd1k+hQAaBXF6mwXGmR22f8yJuQOJIIqTptTVmrewWqoS7NK0O0p"
+        },
+        "diagnosticsStorageAccountName": {
+            "value": "ansibleteam1diag686"
+        },
+        "diagnosticsStorageAccountId": {
+            "value": "Microsoft.Storage/storageAccounts/ansibleteam1diag686"
+        },
+        "diagnosticsStorageAccountType": {
+            "value": "Standard_LRS"
+        },
+        "addressPrefix": {
+            "value": "10.0.3.0/24"
+        },
+        "subnetName": {
+            "value": "default"
+        },
+        "subnetPrefix": {
+            "value": "10.0.3.0/24"
+        },
+        "publicIpAddressName": {
+            "value": "UbuntuTools-ip"
+        },
+        "publicIpAddressType": {
+            "value": "Static"
+        },
+        "publicIpAddressSku": {
+            "value": "Basic"
+        }
+    }
+}
