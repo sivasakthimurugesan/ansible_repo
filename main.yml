@@ -1,8 +1,7 @@
-- hosts: tomcat-servers
+- name: Tomcat installation
+  hosts: tomcat-servers
   connection: local
-  remote_user: root
-  become: yes
-  become_method: sudo
-
-  roles:
-    - tomcat
+  
+  tasks:
+    - include_roles:
+    
