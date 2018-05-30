@@ -1,7 +1,7 @@
 ---
 "version": "8.5.31"
 "v_num": "8"
-"http_port": "8084"
+"http_port": "8080"
 "admin_username": "admin"
 "admin_password": "adminsecret"
 "installation_directory": "/home/ubuntu/java"
