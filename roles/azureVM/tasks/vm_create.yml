@@ -42,6 +42,18 @@
         regexp: '^"new_vm_ip":'
         line: '"new_vm_ip": "{{ UbuntuVmIp_full.stdout }}"'
         insertafter: EOF
+        
+     - name: Create Network Security Group that allows SSH
+       azure_rm_securitygroup:
+       resource_group: myResourceGroup
+       name: myNetworkSecurityGroup
+       rules:
+         - name: SSH
+           protocol: Tcp
+           destination_port_range: 8084
+           access: Allow
+           priority: 1001
+           direction: Inbound
 
 
 
