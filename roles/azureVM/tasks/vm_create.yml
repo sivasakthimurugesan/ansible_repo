@@ -1,0 +1,51 @@
+---
+    - name: Create Azure Deploy
+      azure_rm_deployment:
+        deployment_mode: complete
+        state: present
+        location: eastus
+        resource_group_name: NewGroup
+        template: "{{ lookup('file', '../templates/template.json') }}"
+        parameters: "{{ (lookup('file', '../templates/parameters.json') | from_json).parameters  }}"
+      register: azure
+
+    - name: Get the ip address of the new instance created
+      command: "az vm list-ip-addresses \
+-n UbuntuVm \
+--query [0].virtualMachine.network.publicIpAddresses[0].ipAddress -o tsv"
+      register: UbuntuVmIp_full
+    - shell: "echo {{ UbuntuVmIp_full.stdout }}"
+      register: output
+    
+    - debug: 
+        msg: "{{ output.stdout }}"
+
+    - debug:
+        var: "{{ output }}"
+    
+    - name: Update the new ip to ansible hosts to enable ssh connection
+      replace:
+        dest: /etc/ansible/hosts
+        regexp: '\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b'
+        replace: "{{ output.stdout }}"
+
+    - name: Add new instance to host group
+      replace:
+        dest: ./hosts
+        regexp: '\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b'
+        replace: "{{ output.stdout }}"
+
+
+    - name: Add the ip adress of the new vm into vars file
+      lineinfile:
+        path: ./roles/tomcat/vars/main.yml
+        regexp: '^"new_vm_ip":'
+        line: '"new_vm_ip": "{{ UbuntuVmIp_full.stdout }}"'
+        insertafter: EOF
+
+
+
+
+
+    
+

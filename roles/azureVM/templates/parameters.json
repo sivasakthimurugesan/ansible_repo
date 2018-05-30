@@ -1,0 +1,60 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "eastus"
+        },
+        "virtualMachineName": {
+            "value": "UbuntuVm"
+        },
+        "virtualMachineSize": {
+            "value": "Standard_D2s_v3"
+        },
+        "adminUsername": {
+            "value": "ubuntu"
+        },
+        "virtualNetworkName": {
+            "value": "NewGroup-vnet"
+        },
+        "networkInterfaceName": {
+            "value": "ubuntuvm249"
+        },
+        "diskSizeGB": {
+            "value": "30"
+        },
+        "networkSecurityGroupName": {
+            "value": "UbuntuVm-nsg"
+        },
+        "adminPublicKey": {
+            "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDBhHzHPPSAZ3EpJuKyVSAkYRH1/71xFcOq1QSn/OqHSftfiYiUEv5qb4GpnqsdunO1i4pQyZvBmKFUbscIZH43Yp9h7DIfxpGfpz3BLNmgNhVi1A67dyYHUkMAep0Dmuvh0Ac6yE9cRIRKdSs9ak0OcG0rT5qxnCG2S5BrGFLznxKUekQVOzVYtUqDaBwQ/zmHIUqFzqTpcA61/LkrxU4DHjH3Wu9rk+BVpDWc3gp2THSzMIS+VPKvkBWz0Og8nz4Y09ULGaPBS9fMSIWPUlGW/heltIYsHRqI8ZFzPTVzPpv+VIpmuvj8Ge6DA2VWrw2cqV4PoxVFaOn9ufwuNXez"       
+        },
+        "diagnosticsStorageAccountName": {
+            "value": "NewGroup1diag686"
+        },
+        "diagnosticsStorageAccountId": {
+            "value": "Microsoft.Storage/storageAccounts/NewGroup1diag686"
+        },
+        "diagnosticsStorageAccountType": {
+            "value": "Standard_LRS"
+        },
+        "addressPrefix": {
+            "value": "10.0.3.0/24"
+        },
+        "subnetName": {
+            "value": "default"
+        },
+        "subnetPrefix": {
+            "value": "10.0.3.0/24"
+        },
+        "publicIpAddressName": {
+            "value": "UbuntuVmIp"
+        },
+        "publicIpAddressType": {
+            "value": "Static"
+        },
+        "publicIpAddressSku": {
+            "value": "Basic"
+        }
+    }
+}

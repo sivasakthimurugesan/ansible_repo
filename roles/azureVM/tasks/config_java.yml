@@ -1,0 +1,69 @@
+---
+- hosts: azure_vms
+  gather_facts: false
+  remote_user: root
+  sudo: yes
+  vars:
+    java_version:
+      stdout: will be overriden below
+    java_path:
+      stdout: will be overriden below
+
+  tasks:
+    - name: Wait for SSH to come up
+      wait_for:
+        port: 22
+        timeout: 2000
+        state: started
+    - name: echo the hostname of the vm
+      shell: hostname
+      register: hostname
+    - debug:
+        msg: "{{ hostname.stdout }}"
+ 
+    - name: Install Java 10
+      become_user: root
+      become: True
+      shell: |
+        sudo rm /var/lib/apt/lists/lock
+        sudo rm /var/cache/apt/archives/lock
+        sudo rm /var/lib/dpkg/lock
+        sudo dpkg --configure -a
+        sudo pkill -9 apt-get
+        sudo pkill -9 frontend
+        sudo add-apt-repository ppa:linuxuprising/java -y
+        sudo apt update
+        sudo apt upgrade
+        sudo apt install oracle-java10-installer -y -y -y
+
+    
+    - name: "Get Java version"
+      shell: java -version
+      register: java_version     
+
+    - debug: 
+        msg: "{{ java_version.stderr }}"
+    
+    - file:
+        path: /etc/environment
+        state: touch
+        mode: 0755
+
+    - lineinfile:
+        path: /etc/environment
+        regexp: '^JAVA_HOME='
+        line: 'JAVA_HOME=/usr/lib/jvm/java-10-oracle'
+        insertafter: EOF
+
+    - name: "Set JAVA_HOME permanently"
+      become_user: root
+      become: True
+      shell: . /etc/environment
+   
+    - name: "Get Java version"
+      shell: echo $JAVA_HOME
+      register: java_path
+
+    - debug:
+        msg: "{{ java_path.stdout }}"
+     

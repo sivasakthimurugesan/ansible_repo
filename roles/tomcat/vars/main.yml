@@ -1,0 +1,11 @@
+---
+"version": "8.5.31"
+"v_num": "8"
+"http_port": "8084"
+"admin_username": "admin"
+"admin_password": "adminsecret"
+"installation_directory": "/home/ubuntu/java"
+"download_url": "http://download.oracle.com/otn-pub/java/jdk/8u161-b12/2f38c3b165be4555a1fa6e98c45e0808/jdk-8u161-linux-x64.tar.gz"
+"java_version.stdout_lines": "Java is installed"
+"tomcat_role": "/home/ubuntu/ansible_repo-master/roles/tomcat"
+"new_vm_ip": "40.114.78.27"

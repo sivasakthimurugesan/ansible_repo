@@ -1,0 +1,95 @@
+---
+    - name: Install the mysql using apt-get
+      become_user: root
+      become: True
+      apt:
+        name: "mysql-server"
+        state: present
+   
+    - name: Install python pip
+      become_user: root
+      become: True
+      apt:
+        name: "python-pip"
+        state: present
+
+    - name: Install mysql_config
+      become_user: root
+      become: True
+      apt:
+        name: "libmysqlclient-dev"
+
+    - name: Install the python MySQLB
+      become_user: root
+      become: True
+      pip:
+        name: "MySQL-python"
+
+    - name: Create a user in mysql
+      become_user: root
+      become: True    
+      mysql_user:
+        name: test
+        password: test
+        priv: '*.*:ALL,GRANT'
+        state: present
+
+    - name: Create db
+      become_user: root
+      become: True
+      mysql_db:
+        db: testdb
+        state: present
+
+    - name: Copy the sql file to the remote host
+      become_user: root
+      become: True
+      copy:
+        src: ../files/create_table.sql
+        dest: /home/ubuntu
+      
+    - name: Create a table in the testdb
+      become_user: root
+      become: True
+      mysql_db:
+        db: testdb
+        state: import
+        target: /home/ubuntu/create_table.sql
+    
+    - name: Copy the sql file to the remote host
+      become_user: root
+      become: True
+      copy:
+        src: ../files/insert_row.sql
+        dest: /home/ubuntu
+
+    - name: Insert a row into the table 'customers' in 'testdb'
+      become_user: root
+      become: True
+      mysql_db:
+        db: testdb
+        state: import
+        target: /home/ubuntu/insert_row.sql
+
+    - name: Copy the sql file to the remote host
+      become_user: root
+      become: True
+      copy:
+        src: ../files/display_rows.sql
+        dest: /home/ubuntu
+     
+    - name: Query all the rows in the customers table
+      mysql_db:
+        db: testdb
+        state: import
+        target: /home/ubuntu/display_rows.sql
+      
+    - name: Query
+      become_user: root
+      become: True
+      command: > 
+        mysql testdb --execute="select * from customers;"
+      register: output_rows
+
+    - debug:
+        var: output_rows.stdout_lines

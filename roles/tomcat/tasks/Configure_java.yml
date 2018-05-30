@@ -1,0 +1,40 @@
+---
+- hosts: azure_vms
+  tasks: 
+    - name: "Creating directory to download Jdk binaries" 
+      file: 
+        mode: "u=rw,g=wx,o=rwx"
+        path: "{{ installation_directory }}"
+        recurse: true
+        state: directory
+
+    - name: "Download java binary from Oracle site"
+      get_url: 
+        dest: "{{ installation_directory }}"
+        force_basic_auth: true
+        url: "{{ download_url }}"
+  
+    - name: "Unarchive tar file"
+      unarchive: 
+        dest: "{{ installation_directory }}/jdk-8u161-linux-x64"
+        remote_src: true
+        src: "{{ installation_directory }}/jdk-8u161-linux-x64.tar.gz"
+
+    - name: "Set Java HOME" 
+      lineinfile: 
+        dest: ~/.bashrc regexp='^JAVA_HOME'> 
+        line: \"export JAVA_HOME={{ installation_directory }}/jdk-8u161-linux-x64/\""
+ 
+    - name: "Set JAVA PATH"
+      lineinfile: 
+        dest: ~/.bashrc regexp='^JAVA_HOME'> 
+        line: \"export PATH=$M2:$PATH:{{ installation_directory }}/jdk-8u161-linux-x64/bin\""
+ 
+    - name: "Source Bashrc"
+      action: "shell source ~/.bashrc"
+ 
+    - name: "Get Java version"
+      register: java_version
+      shell: java -version
+
+    - debug: "msg=\"{{ java_version.stdout_lines }}\""

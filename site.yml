@@ -1,0 +1,13 @@
+---
+- hosts: localhost
+  roles:
+    - azureVM
+
+- hosts: azure_vms
+  roles:
+    - java
+    - tomcat
+    - mysql
+    # - java
+    # - tomcat
+    # - mysql

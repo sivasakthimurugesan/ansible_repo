@@ -1,0 +1,40 @@
+---
+- hosts: azure_vms
+  gather_facts: false
+  remote_user: root
+  sudo: yes
+  vars:
+    java_version:
+      stdout: will be overriden below
+    java_path:
+      stdout: will be overriden below
+
+  tasks:
+    - name: add repo for java 8
+      apt_repository: 
+        repo: 'ppa:webupd8team/java' 
+        state: present
+
+    - name: set licence selected
+      shell: /bin/echo debconf shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+      sudo: yes
+
+    - name: set licence seen
+      shell: /bin/echo debconf shared/accepted-oracle-license-v1-1 seen true | /usr/bin/debconf-set-selections
+      sudo: yes
+
+    - name: install java 8
+      apt: 
+        name: oracle-java8-installer 
+        state: latest 
+        update-cache: yes 
+        force: yes
+      sudo: yes
+
+    - name: "Get Java version"
+      shell: java -version
+      register: java_version
+
+    - debug:
+        msg: "{{ java_version.stderr }}"
+

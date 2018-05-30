@@ -1,0 +1,147 @@
+---
+    - name: Remove Older Tomcat Directories
+      become_user: root
+      become: True
+      file: 
+        path: /usr/local/tomcat 
+        state: absent
+     
+    - stat: 
+        path: /usr/local/
+      register: tc
+
+    - name: Download Tomcat
+      become_user: root
+      become: True
+      get_url:
+        url: "http://www-us.apache.org/dist/tomcat/tomcat-{{ v_num }}/v{{ version }}/bin/apache-tomcat-{{ version }}.tar.gz"
+        dest: /tmp 
+        mode: 0755
+
+    - name: Unpack Tomcat
+      become_user: root
+      become: True
+      unarchive: 
+        src: "/tmp/apache-tomcat-{{ version }}.tar.gz"
+        dest: /usr/local/ 
+        remote_src: yes
+        mode: 644
+    
+    - name: Change Tomcat Directory Name
+      become_user: root
+      become: True
+      command: "mv /usr/local/apache-tomcat-{{ version }} /usr/local/tomcat"
+
+    - name: Change the mode of Tomcat recursively
+      become_user: root
+      become: True
+      file:
+        dest: /usr/local/tomcat
+        owner: root
+        group: root
+        mode: 755
+        recurse: yes
+    
+    - name: Symlink install directory
+      file:
+        src: /usr/local/tomcat
+        path: /opt/tomcat
+        state: link
+
+    - name: Upload server.xml with modified Changes
+      become_user: root
+      become: True
+      copy:
+        src: "{{ tomcat_role }}/templates/server.xml"
+        dest: "/usr/local/tomcat/conf"
+        force: yes
+        owner: root
+        group: root
+        mode : 644
+          
+    - name: Upload tomcat-users.xml with users added
+      become_user: root
+      become: True
+      copy: 
+        src: "{{ tomcat_role }}/templates/tomcat-users.xml"
+        dest: "/usr/local/tomcat/conf"
+        force: yes
+        owner: root
+        group: root
+        mode : 644
+    
+    - name: Upload context.xml with users added
+      become_user: root
+      become: True
+      copy:
+        src: "{{ tomcat_role }}/templates/context.xml"
+        dest: "/usr/local/tomcat/webapps/manager/META-INF"
+        force: yes
+        owner: root
+        group: root
+        mode : 644
+#    - name: Install Tomcat init.d Script
+#      copy: 
+#        src: "{{ tomcat_role }}/files/tomcat_initscript.sh"
+#        dest: /etc/init.d/tomcat 
+#        mode: 0755
+
+    - name: "Reload tomcat to make the changes made in the config files effective"
+      become_user: root
+      become: True
+      shell: systemctl daemon-reload
+    
+   # - name: "Stop tomcat"
+   #   become_user: root
+   #   become: True
+   #   command: sh /opt/tomcat/bin/shutdown.sh
+
+    - name: "Start tomcat"
+      become_user: root
+      become: True  
+      command: "{{item}}"
+      with_items:
+        - sh /opt/tomcat/bin/startup.sh
+        - sh /opt/tomcat/bin/shutdown.sh
+        - sh /opt/tomcat/bin/startup.sh
+
+
+#    - name: "Create systemd service script for Tomcat"
+#      copy:
+#        src: "{{ tomcat_role }}/templates/tomcat.service"
+#        dest: "/etc/systemd/system/tomcat.service"
+#        force: yes
+#        owner: root
+#        group: root
+#        mode : 644
+
+#    - name: Start and enable Tomcat service
+#      systemd:
+#        name: tomcat
+#        state: started
+#        enabled: true
+#        daemon_reload: true
+   
+#    - name: "Start Tomcat"
+#      service:
+#        name: tomcat
+#        state: started
+   
+    - name: "Wait for Tomcat to Start on Port 8084 with the ip {{ new_vm_ip }}"
+      wait_for: 
+        host: "{{ new_vm_ip }}" 
+        port: "{{ http_port }}"
+
+    - name: "Copy teh war file from nexus ti webapps folder"
+      become_user: root
+      become: True
+      maven_artifact:
+        group_id: POC4-TEAM1
+        artifact_id: InformationCentre
+        extension: war
+        repository_url: 'http://52.173.28.7:8081/repository/maven-releases/'
+        username: build_user
+        password: build_pwd
+        dest: /opt/tomcat/webapps/InformationCentre.war
+        version: latest
+
