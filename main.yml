@@ -1,7 +1,0 @@
-- name: Tomcat installation
-  hosts: tomcat-servers
-  connection: local
-  
-  tasks:
-    - include_roles:
-    
