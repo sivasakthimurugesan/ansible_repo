@@ -79,13 +79,15 @@
         dest: /home/ubuntu
      
     - name: Query all the rows in the customers table
+      become_user: root
+      become: True
       mysql_db:
         db: testdb
         state: import
         target: /home/ubuntu/display_rows.sql
       
     - name: Query
-      become_user: root
+      become_user: test
       become: True
       command: > 
         mysql testdb --execute="select * from customers;"
