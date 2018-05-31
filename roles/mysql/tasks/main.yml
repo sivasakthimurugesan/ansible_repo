@@ -87,7 +87,7 @@
         target: /home/ubuntu/display_rows.sql
       
     - name: Query
-      become_user: test
+      become_user: root
       become: True
       command: > 
         mysql testdb --execute="select * from customers;"
