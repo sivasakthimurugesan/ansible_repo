@@ -93,7 +93,7 @@
         mysql testdb --execute="select * from customers;"
       register: output_rows
       
-   - name: Query to delete the table
+    - name: Query to delete the table
       become_user: root
       become: True
       command: >
