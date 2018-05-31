@@ -96,14 +96,20 @@
    #   become: True
    #   command: sh /opt/tomcat/bin/shutdown.sh
 
+    #- name: "Start tomcat"
+    #  become_user: root
+    #  become: True  
+    #  command: "{{item}}"
+    #  with_items:
+    #    - sh /opt/tomcat/bin/shutdown.sh
+    #    - sh /opt/tomcat/bin/startup.sh
+        #- sh /opt/tomcat/bin/startup.sh
+        
     - name: "Start tomcat"
       become_user: root
-      become: True  
-      command: "{{item}}"
-      with_items:
-        - sh /opt/tomcat/bin/shutdown.sh
-        - sh /opt/tomcat/bin/startup.sh
-        #- sh /opt/tomcat/bin/startup.sh
+      become: True
+      command: nohup /opt/tomcat/bin/startup.sh
+
 
 
 #    - name: "Create systemd service script for Tomcat"
