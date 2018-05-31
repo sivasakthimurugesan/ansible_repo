@@ -92,6 +92,13 @@
       command: > 
         mysql testdb --execute="select * from customers;"
       register: output_rows
+      
+   - name: Query to delete the table
+      become_user: root
+      become: True
+      command: >
+        mysql testdb --execute="DROP TABLE customers;"
+ 
 
     - debug:
         var: output_rows.stdout_lines
