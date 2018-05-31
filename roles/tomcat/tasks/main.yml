@@ -101,8 +101,8 @@
       become: True  
       command: "{{item}}"
       with_items:
+        - sh /opt/tomcat/bin/shutdown.sh
         - sh /opt/tomcat/bin/startup.sh
-        #- sh /opt/tomcat/bin/shutdown.sh
         #- sh /opt/tomcat/bin/startup.sh
 
 
